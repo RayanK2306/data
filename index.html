@@ -38,7 +38,7 @@
             event.preventDefault();
             var inputValue = document.getElementById('searchInput').value.trim();
             if (inputValue !== '') {
-                var fileName = inputValue + '.html';
+                var fileName = 'Data/' + inputValue + '.html'; // Chemin d'accès au dossier "Data"
                 var fileURL = fileName;
                 fetch(fileURL)
                     .then(response => {
