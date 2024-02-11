@@ -1,32 +1,62 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recherche de fichier numérique</title>
+    <title>Recherche de fichier HTML</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <h1>Rechercher un fichier</h1>
-    <form action="index.php" method="get">
-        <input type="number" name="fichier" placeholder="Entrez un numéro de fichier">
-        <button type="submit">Rechercher</button>
+    <h2>Recherche de fichier HTML</h2>
+    <form id="searchForm">
+        <input type="text" id="searchInput" placeholder="Entrez un nombre">
+        <input type="submit" value="Rechercher">
     </form>
 
-    <?php
-    //Récupérer le numéro de fichier
-    $fichier = $_GET['fichier'];
+    <div id="result"></div>
 
-    //Vérifier si le fichier existe
-    if (file_exists("$fichier.html")) {
-        //Ouvrir le fichier
-        echo "<h2>Résultat de la recherche</h2>";
-        echo "<p>Le fichier $fichier.html a été trouvé.</p>";
-        echo "<a href='$fichier.html'>Ouvrir le fichier</a>";
-    } else {
-        //Afficher un message d'erreur
-        echo "<h2>Résultat de la recherche</h2>";
-        echo "<p>Le fichier $fichier.html n'a pas été trouvé.</p>";
-    }
-    ?>
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var inputValue = document.getElementById('searchInput').value.trim();
+            if (inputValue !== '') {
+                var fileName = inputValue + '.html';
+                var fileURL = fileName;
+                fetch(fileURL)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Fichier non trouvé');
+                        }
+                        return response.text();
+                    })
+                    .then(data => {
+                        document.getElementById('result').innerHTML = data;
+                    })
+                    .catch(error => {
+                        document.getElementById('result').innerHTML = 'Erreur : ' + error.message;
+                    });
+            } else {
+                document.getElementById('result').innerHTML = 'Veuillez entrer un nombre';
+            }
+        });
+    </script>
 </body>
 </html>
